@@ -1,0 +1,11 @@
+grid.o: grid.cpp
+g++ -c -std=c++11 grid.cpp
+
+main.o: main.cpp grid.o
+g++ -std=c++11 grid.o main.cpp
+
+main: main.o
+g++ -o main.o
+
+clean:
+rm -f *.o
