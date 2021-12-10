@@ -2,23 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "grid.hpp"
+
 int** create_grid(int n){
     int** grid = new int*[n];
     for(int i = 0; i < n; i++){
         grid[i] = new int[n];
         for (int j = 0; j < n; j++){
             grid[i][j] = 0;
-        }
-    }
-    return grid;
-}
-
-int** create_random_grid(int n){
-    int** grid = new int*[n];
-    for(int i = 0; i < n; i++){
-        grid[i] = new int[n];
-        for(int j = 0; j < n; j++){
-            grid[i][j] = rand() % 10;
         }
     }
     return grid;
@@ -66,7 +57,4 @@ void free_grid(int** grid, int n){
         delete[] grid[i];
     }
     delete[] grid;
-}
-void fill_grid(int** grid, int i, int j, int value){
-    grid[i][j] = value;
 }

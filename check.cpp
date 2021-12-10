@@ -1,11 +1,12 @@
 #include <iostream>
 #include <numeric>
 #include <vector>
-#include "constants.hpp"
 
-bool valid(int** grid, int n, int m, int i, int j, int value){
+#include "check.hpp"
 
-    if (check_row(grid, n, m, i) && check_col(grid, n, m, j) && check_box(grid, n, m, i, j)) {
+bool valid(int** grid, int n, int i, int j){
+
+    if (check_row(grid, n, i) && check_col(grid, n, j) && check_box(grid, n, i, j)) {
         return true;
     }
     return false;
@@ -27,61 +28,59 @@ bool check_row(int** grid, int n, int i){
     store.assign(n, 0);
 
     for(int j=0; j<n; j++){
-        if (grid[i][j] == 0){
+        if (grid[i][j] == 0) {
+            continue;
+        }
+        else if (store[grid[i][j]-1] == 1){
             return false;
         }
         else{
-            store[grid[i][j]] = 1;
+            store[grid[i][j]-1] = 1;
         }
-    }
-
-    if(std::accumulate(store.begin(), store.end(), 0)==9){
-        return true;
-    }
-    else{
-        return false;
-    }
-
+    } 
+    return true;
 }
+
 bool check_col(int** grid, int n, int j){
     std::vector<int> store;
     store.assign(n, 0);
 
-    for(int i=0; i<n; j++){
-        if(grid[i][j] == 0) return false;
-        
-        else{
-            store[grid[i][j]] = 1;
+    for(int i=0; i<n; i++){
+        if (grid[i][j] == 0) {
+            continue;
         }
+        else if (store[grid[i][j]-1] == 1){
+            return false;
+        }
+        else{
+            store[grid[i][j]-1] = 1;
+        }    
     }
-
-    if(std::accumulate(store.begin(), store.end(), 0)==9){
-        return true;
-    }
-    else{
-        return false;
-    }
+    return true;
 }
+
 bool check_box(int** grid, int n, int i, int j){
     std::vector<int> store;
-    store.assign(9, 0);
-
+    int block_size = std::sqrt(n);
+    store.assign(n, 0);
     int row = i - i%3;
     int col = j - j%3;
 
-    for (int k=row; k<row+3; k++){
-        for(int l=col; l<col+3; l++){
-            if(grid[l][k] == 0){
+    // std::cout << "row: " << row << " col: " << col << std::endl;
+    for (int k=row; k<row+block_size; k++){
+        for(int l=col; l<col+block_size; l++){
+            if (grid[k][l] == 0){
+                continue;
+            }
+            // std::cout << "store :" <<store[grid[l][k]-1] << std::endl;
+
+            if(store[grid[k][l]-1] == 1){
                 return false;
             }
             else{
-                store[grid[l][k]] = 1;
+                store[grid[k][l]-1] = 1;
             }
         }
     }
-    if (std::accumulate(store.begin(), store.end(), 0) == 9){
-        return true;
-    }
-    else{
-        return false;
+    return true;
 }
