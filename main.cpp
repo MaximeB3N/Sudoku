@@ -15,16 +15,20 @@ int main()
 
     // int** grid = create_grid(N);
     // print_grid(grid, N);
-    int **grid = create_grid_from_file(filename2, N);
+    // int **grid = create_grid_from_file(filename2, N);
 
-    print_grid(grid, N);
+    // print_grid(grid, N);
 
     int **grid2 = fillGrid(N);
-    print_grid(grid2, N);
-    grid2[0][0] = 0;
-    grid2[0][1] = 0;
-    int counter = backtrackingSolver(grid2, N);
-    std::cout << "counter: " << counter << std::endl;
+    // print_grid(grid2, N);
+
+    int **exercice = startGenerator(grid2, N, 9);
+    std::cout << "Exercice_8,8 : " << exercice[8][8] << std::endl;
+    print_grid(exercice, N);
+    // grid2[0][0] = 0;
+    // grid2[0][1] = 0;
+    // int counter = backtrackingSolver(grid2, N);
+    // std::cout << "counter: " << counter << std::endl;
 
 
     return 0;

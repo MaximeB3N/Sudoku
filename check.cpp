@@ -84,3 +84,19 @@ bool check_box(int** grid, int n, int i, int j){
     }
     return true;
 }
+
+bool check_removable(int** grid, int n, int i, int j){
+    int value = grid[i][j];
+    for (int l=1; l<n+1; l++){
+        if (grid[i][j] != l){
+            grid[i][j] = l;
+            // In that case, it may be possible to have multiple solutions  
+            if (valid(grid, n, i, j)){
+                return false;
+            }
+        }
+    }
+    // In that case, value is the only possible value
+    grid[i][j] = value;
+    return true;
+}

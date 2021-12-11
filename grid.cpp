@@ -15,6 +15,17 @@ int** create_grid(int n){
     return grid;
 }
 
+int** copy_grid(int** grid, int n){
+    int ** copy = create_grid(n);
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            copy[i][j] = grid[i][j];
+        }
+    }
+    return copy;
+
+}
+
 int** create_grid_from_file(const char* filename, int n){
     int** grid = create_grid(n);
     int a = 0;
