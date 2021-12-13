@@ -61,13 +61,35 @@ bool fillGrid(int** grid, int n) {
         }
     }
     // This case should never happen
-    std::cout << "Error: fillGrid() failed" << std::endl;
+    // std::cout << "Error: fillGrid() failed" << std::endl;
     return false;
 }
 
+int countSolutions(int ** grid, int n, int i, int j){
+    int count = 1;
+    int value = grid[i][j];
+    int** copy = copy_grid(grid, n);
+
+    for (int k = 0; k < n; k++){
+        if (k+1!=value){
+            copy[i][j] = k+1;
+            if (valid(copy, n, i, j)){
+                if (fillGrid(copy, n)){
+                    count++;
+
+                }
+            }
+        }
+        
+    }
+    return count;
+
+}
 
 int** startGenerator(int **solution, int n, int k){
-    
+    // To be modified
+    // Need to rethink about it and 
+    // change check_removable(...) in check.cpp
     if (k>n*n){
         std::cout << "Error: k is too big" << std::endl;
         return NULL;
@@ -80,7 +102,7 @@ int** startGenerator(int **solution, int n, int k){
     std::vector<std::vector<int> > gridList;
     for (int i=0; i<n; i++){
         for (int j=0; j<n; j++){
-            std::vector<int> tupple = {i,j};
+            std::vector<int> tupple {i,j};
             gridList.push_back(tupple);
         }
     }
@@ -89,14 +111,16 @@ int** startGenerator(int **solution, int n, int k){
     while (counter < k && n*n - pointer > k){
         exercice = copy_grid(solution, n);
         for(int i = pointer; i < n*n; i++){
-            if (check_removable(exercice, n , gridList[i][0], gridList[i][1])){
+            // if (check_removable(exercice, n , gridList[i][0], gridList[i][1])){
+            if (countSolutions(exercice, n, gridList[i][0], gridList[i][1]) == 1){
                 exercice[gridList[i][0]][gridList[i][1]] = 0;
-                // std::cout << "Removing " << gridList[i][0] << " " << gridList[i][1] << std::endl;
                 counter++;
                 if(counter == k){
                     return exercice;
                 }
             }
+            
+                
         }
         std::cout << counter << std::endl;
         counter = 0;

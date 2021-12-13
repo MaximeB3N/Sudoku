@@ -4,3 +4,4 @@ bool check_row(int** grid, int n, int i);
 bool check_col(int** grid, int n, int j);
 bool check_box(int** grid, int n, int i, int j);
 bool check_removable(int** grid, int n, int i, int j);
+bool valid_starter(int** grid, int** solution, int n);

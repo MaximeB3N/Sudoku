@@ -100,3 +100,14 @@ bool check_removable(int** grid, int n, int i, int j){
     grid[i][j] = value;
     return true;
 }
+
+bool valid_starter(int** grid, int** solution, int n){
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            if(grid[i][j] != solution[i][j]){
+                return false;
+            }
+        }
+    }
+    return true;
+}

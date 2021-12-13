@@ -28,7 +28,6 @@ int** copy_grid(int** grid, int n){
 
 int** create_grid_from_file(const char* filename, int n){
     int** grid = create_grid(n);
-    int a = 0;
     FILE* fp = fopen(filename, "r");
 
     for(int i = 0; i < n; i++){
