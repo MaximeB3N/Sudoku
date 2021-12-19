@@ -23,7 +23,7 @@ class SudokuEnv(gym.Env):
 
         self.initial_state = np.copy(self.currentEx)
 
-        self.action_space = spaces.Box(low=np.array([0, 0, 1]), high=np.array([N-1, N-1, N]), dtype=np.int32)
+        self.action_space = spaces.Box(low=1, high=N, shape=(N,N), dtype=np.int32)
 
         self.observation_space = spaces.Box(low=1, high=N, shape=(N,N), dtype=np.int32)
 
