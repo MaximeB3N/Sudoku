@@ -39,3 +39,29 @@ def display_grid(screen, grid, blockSize, width, height, color, font, margin_tex
         for y in range(height[0], height[1], k*blockSize):
             rect = pygame.Rect(x, y, k*blockSize, k*blockSize)
             pygame.draw.rect(screen, color, rect, 4)
+
+
+def state_modification(ev):
+    box_state = -1
+    if ev.key == pygame.K_ESCAPE:
+        box_state = 0
+    if ev.key == pygame.K_1:
+        box_state = 1
+    if ev.key == pygame.K_2:
+        box_state = 2
+    if ev.key == pygame.K_3:
+        box_state = 3
+    if ev.key == pygame.K_4:
+        box_state = 4
+    if ev.key == pygame.K_5:
+        box_state = 5
+    if ev.key == pygame.K_6:
+        box_state = 6
+    if ev.key == pygame.K_7:
+        box_state = 7
+    if ev.key == pygame.K_8:
+        box_state = 8
+    if ev.key == pygame.K_9:
+        box_state = 9
+
+    return box_state
