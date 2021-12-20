@@ -1,5 +1,7 @@
 import pygame
-from src.python.constants import BLOCKSIZE, COLOR_DARK_GENERATOR, WIDTH
+import numpy as np
+
+from src.python.constants import N, BLOCKSIZE, COLOR_DARK_GENERATOR
 
 def inside_rect(mouse, posX, posY, width, height):
     if posX <= mouse[0] <= posX + width and posY <= mouse[1] <= posY + height:
@@ -22,8 +24,8 @@ def display_button(screen, text, color_light, color_dark, margin, posX, posY, wi
 
 def display_grid(screen, grid, blockSize, width, height, color, font, margin_text):
     
-    for i, x in enumerate(range(width[0], width[1], blockSize)):
-        for j, y in enumerate(range(height[0], height[1], blockSize)):
+    for j, x in enumerate(range(width[0], width[1], blockSize)):
+        for i, y in enumerate(range(height[0], height[1], blockSize)):
             if i<=8 and j<=8:
                 pygame.draw.rect(screen, COLOR_DARK_GENERATOR, [x, y, BLOCKSIZE, BLOCKSIZE])
                 text_block = font.render(f"{int(grid[i][j])}" , True , color)
@@ -31,3 +33,9 @@ def display_grid(screen, grid, blockSize, width, height, color, font, margin_tex
 
             rect = pygame.Rect(x, y, blockSize, blockSize)
             pygame.draw.rect(screen, color, rect, 1)
+
+    k = int(np.sqrt(N))
+    for x in range(width[0], width[1], k*blockSize):
+        for y in range(height[0], height[1], k*blockSize):
+            rect = pygame.Rect(x, y, k*blockSize, k*blockSize)
+            pygame.draw.rect(screen, color, rect, 4)

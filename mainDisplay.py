@@ -36,12 +36,15 @@ N_generate = len(pathsEx)
 ex = None
 sol = None
 # Defining an unfilled grid
-ex = np.ones((N,N))*(-1)
+ex = np.zeros((N,N))
+
+BUFFER = []
 
 while True:
     
     mouse = pygame.mouse.get_pos()
-
+    background = pygame.image.load('Files/display/china.jpeg')
+    screen.blit(background, (0,0))
     display_grid(screen, ex, BLOCKSIZE, WIDTH_GRID, HEIGHT_GRID, BLACK, SMALLFONT, MARGIN_NUMBER)
 
     for ev in pygame.event.get():  
@@ -66,10 +69,13 @@ while True:
                 print(ex) 
 
             elif inside_rect(mouse, WIDTH_GRID[0], HEIGHT_GRID[0], N*BLOCKSIZE, N*BLOCKSIZE):
-                i, j = int(mouse[0]/BLOCKSIZE - WIDTH_GRID[0]), int(mouse[1]/BLOCKSIZE-HEIGHT_GRID[0])
+                i, j = int( (mouse[0]-WIDTH_GRID[0])/BLOCKSIZE), int( (mouse[1] - HEIGHT_GRID[0])/BLOCKSIZE)
                 print(i,j)
                 if i<0 or j<0 or i>=N or j>=N:
                     continue
+                elif ex[i][j] == 0:
+                    continue
+
 
 
     # Displaying the quit button 
