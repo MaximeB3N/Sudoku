@@ -10,11 +10,11 @@ class SudokuPlayer(SudokuEnv):
         super(SudokuPlayer, self).__init__(N, rootEx, rootSol)
         self.memory = ReplayMemory(10000)
         self.gamma = 0.9
-        self.exploration_rate = 1
-        self.exploration_rate_decay = 0.99999975
+        self.exploration_rate = 1.
+        self.exploration_rate_decay = 0.99999
         self.exploration_rate_min = 0.1
         self.curr_step = 0
-        self.save_every = 5e5
+        self.save_every = 100000
         self.batch_size = 32
         self.burnin = 1e4  # min. experiences before training
         self.learn_every = 3  # no. of experiences between updates to Q_online
@@ -29,24 +29,39 @@ class SudokuPlayer(SudokuEnv):
         self.loss_fn = torch.nn.SmoothL1Loss()
 
 
+
     def act(self, state):
         # To be modified
+        action = None
         if np.random.rand() < self.exploration_rate:
-            return np.random.randint(self.N)
+            action = np.random.randint((self.N*self.N*self.N))
         else:
-            return self.net(state, model="online").argmax(axis=1).item()
+            action = self.net(state, model="online").argmax().item()
+            #action = np.array([value//81, (value%81)//9, (value%81)%9])
+            
+        self.curr_step+=1
+        self.exploration_rate *= self.exploration_rate_decay
+        self.exploration_rate = max(self.exploration_rate_min, self.exploration_rate)
+            
+        return action
 
 
-    def cache(self, state, next_state, action, reward, done):
-        state, next_state, action, reward, done = (torch.tensor(state).to(self.device), torch.tensor(next_state).to(self.device),
-                                                torch.tensor([action]).to(self.device),torch.tensor([reward]).to(self.device), torch.tensor([done]).to(self.device)
+    def cache(self, state, action, next_state, reward, done):
+        state, action, next_state, reward, done = (torch.from_numpy(state).to(self.device), torch.tensor(action).to(self.device),
+                                                torch.from_numpy(np.array([next_state])).to(self.device),torch.tensor([reward]).to(self.device), torch.tensor([done]).to(self.device)
                                                 )                                     
-        self.memory.push(state, next_state, action, reward, done)
+        self.memory.push(state, action, next_state, reward, done)
 
     def recall(self):
         return self.memory.sample(self.batch_size)
 
     def td_estimate(self, state, action):
+        # print(self.net(state, model="online"))
+        # print(self.net(state, model="online").shape)
+        # print(action.shape)
+        
+        # print(action)
+        # Wrong shape for action
         current_Q = self.net(state, model="online")[
             np.arange(0, self.batch_size), action
         ]  # Q_online(s,a)
@@ -98,8 +113,15 @@ class SudokuPlayer(SudokuEnv):
             return None, None
 
         # Sample from memory
-        state, next_state, action, reward, done = self.recall()
+        # print(len(self.recall()))
+        # print(type(self.recall()))
+    
+        state, action, next_state, reward, done = self.recall()
 
+        # print(state)
+        # print(action)
+        # print(state.shape)
+        # print(action.shape)
         # Get TD Estimate
         td_est = self.td_estimate(state, action)
 

@@ -15,7 +15,7 @@ TARGET_UPDATE = 10
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 Transition = namedtuple('Transition',
-                        ('state', 'action', 'next_state', 'reward'))
+                        ('state', 'action', 'next_state', 'reward', 'done'))
 
 
 class ReplayMemory(object):
@@ -28,13 +28,14 @@ class ReplayMemory(object):
         self.memory.append(Transition(*args))
 
     def sample(self, batch_size):
-        return random.sample(self.memory, batch_size)
+        # regler ça pour que cela renvoie bien un batch de taille batch_size pour chaque element
+        batch = random.sample(self.memory, batch_size)
+        state, next_state, action, reward, done = map(torch.stack, zip(*batch))
+        return state, next_state, action.squeeze(), reward.squeeze(), done.squeeze()
 
     def __len__(self):
         return len(self.memory)
 
-
-steps_done = 0
 
 def select_action(policy_net, n_actions, device, state, steps_done):
     sample = random.random()

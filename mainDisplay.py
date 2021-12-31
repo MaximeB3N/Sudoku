@@ -103,10 +103,10 @@ while True:
 
             elif inside_rect(mouse, WIDTH_GRID[0], HEIGHT_GRID[0], N*BLOCKSIZE, N*BLOCKSIZE):
                 i, j = int( (mouse[0]-WIDTH_GRID[0])/BLOCKSIZE), int( (mouse[1] - HEIGHT_GRID[0])/BLOCKSIZE)
-                print(i,j)
+                # print(i,j)
                 if i<0 or j<0 or i>=N or j>=N:
                     continue
-
+                
                 # Reverse i and j to have the same convention as in the grid
                 elif initial_ex[j][i] == 0 and not solved:
                     if box_state != 0:
